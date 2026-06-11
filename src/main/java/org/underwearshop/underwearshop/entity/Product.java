@@ -2,7 +2,13 @@ package org.underwearshop.underwearshop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.PersistenceCreator;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +27,34 @@ public class Product {
 
     private String image;
 
+    private String circumference;
+
+    private String cup;
+
+    private String color;
+
+    private String material;
+
+    private String features;
+
+    private BigDecimal price;
+
+    private Boolean inStock;
+
+    private String bustModel;
+
+    private String size;
+
+    private String briefStyle;
+
+    @CreationTimestamp
+    private Instant createdAt;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<ProductImage> images = new ArrayList<>();
 }

@@ -11,15 +11,15 @@ import org.springframework.data.annotation.PersistenceCreator;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__(@PersistenceCreator))
 @Entity
-public class Filter {
+public class ProductImage {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @GeneratedValue
     private Long id;
 
-    private String name;
+    private String image;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Product product;
 }
