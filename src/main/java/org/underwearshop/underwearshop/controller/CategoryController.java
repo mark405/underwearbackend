@@ -12,6 +12,8 @@ import org.underwearshop.underwearshop.dto.CategoryDTO;
 import org.underwearshop.underwearshop.dto.CategoryUpdateDTO;
 import org.underwearshop.underwearshop.service.CategoryService;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/category")
@@ -19,11 +21,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public Page<CategoryDTO> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
-    ) {
-        return categoryService.findAll(page, size).map(CategoryDTO::new);
+    public List<CategoryDTO> findAll(@RequestParam(required = false) Long parentId) {
+        return categoryService.findAll(parentId).stream().map(CategoryDTO::new).toList();
     }
 
     @GetMapping("/{id}")

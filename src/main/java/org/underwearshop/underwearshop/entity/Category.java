@@ -20,4 +20,8 @@ public class Category {
     private String name;
 
     private String image;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 }

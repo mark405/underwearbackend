@@ -25,11 +25,7 @@ public class ProductCreateDTO {
 
     private BigDecimal price;
 
-    private String bustModel;
-
     private String size;
-
-    private String briefStyle;
 
     @NotNull
     private Long categoryId;

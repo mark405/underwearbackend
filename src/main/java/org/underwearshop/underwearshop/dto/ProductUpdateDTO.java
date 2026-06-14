@@ -28,11 +28,7 @@ public class ProductUpdateDTO {
 
     private Boolean inStock;
 
-    private String bustModel;
-
     private String size;
-
-    private String briefStyle;
 
     private List<String> imagesToDelete = new ArrayList<>();
 

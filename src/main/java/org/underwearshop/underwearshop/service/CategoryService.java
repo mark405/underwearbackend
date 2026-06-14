@@ -1,18 +1,18 @@
 package org.underwearshop.underwearshop.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.underwearshop.underwearshop.dto.CategoryCreateDTO;
-import org.underwearshop.underwearshop.dto.CategoryDTO;
 import org.underwearshop.underwearshop.dto.CategoryUpdateDTO;
 import org.underwearshop.underwearshop.entity.Category;
 import org.underwearshop.underwearshop.repository.CategoryRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,8 +22,12 @@ public class CategoryService {
     private final FileStorageService fileStorageService;
 
     @Transactional(readOnly = true)
-    public Page<Category> findAll(int page, int size) {
-        return categoryRepository.findAll(PageRequest.of(page, size));
+    public List<Category> findAll(Long parentId) {
+        if (parentId == null) {
+            return categoryRepository.findByParentIsNullOrderByIdAsc();
+        }
+
+        return categoryRepository.findByParentIdOrderByIdAsc(parentId);
     }
 
     @Transactional(readOnly = true)

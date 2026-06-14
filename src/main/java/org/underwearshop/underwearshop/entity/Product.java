@@ -41,11 +41,7 @@ public class Product {
 
     private Boolean inStock;
 
-    private String bustModel;
-
     private String size;
-
-    private String briefStyle;
 
     @CreationTimestamp
     private Instant createdAt;

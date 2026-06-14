@@ -22,16 +22,14 @@ public class ProductDTO {
     private final String features;
     private final BigDecimal price;
     private final Boolean inStock;
-    private final String bustModel;
     private final String size;
-    private final String briefStyle;
     private final CategoryDTO category;
 
     public ProductDTO(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.image = product.getImage();
-        this.images = product.getImages().stream().map(ProductImage::getImage).toList();
+        this.images = product.getImages() != null ? product.getImages().stream().map(ProductImage::getImage).toList() : null;
         this.circumference = product.getCircumference();
         this.cup = product.getCup();
         this.color = product.getColor();
@@ -39,9 +37,7 @@ public class ProductDTO {
         this.features = product.getFeatures();
         this.price = product.getPrice();
         this.inStock = product.getInStock();
-        this.bustModel = product.getBustModel();
         this.size = product.getSize();
-        this.briefStyle = product.getBriefStyle();
 
         this.category = new CategoryDTO(product.getCategory());
     }

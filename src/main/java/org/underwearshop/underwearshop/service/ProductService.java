@@ -59,9 +59,7 @@ public class ProductService {
                 .features(dto.getFeatures())
                 .circumference(dto.getCircumference())
                 .cup(dto.getCup())
-                .bustModel(dto.getBustModel())
                 .size(dto.getSize())
-                .briefStyle(dto.getBriefStyle())
                 .category(category)
                 .inStock(true)
                 .build();
@@ -107,9 +105,7 @@ public class ProductService {
                     entity.setFeatures(dto.getFeatures());
                     entity.setCircumference(dto.getCircumference());
                     entity.setCup(dto.getCup());
-                    entity.setBustModel(dto.getBustModel());
                     entity.setSize(dto.getSize());
-                    entity.setBriefStyle(dto.getBriefStyle());
                     entity.setInStock(dto.getInStock());
 
                     if (mainImage != null) {
