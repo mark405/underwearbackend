@@ -11,18 +11,20 @@ import org.springframework.data.annotation.PersistenceCreator;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__(@PersistenceCreator))
 @Entity
-public class Category {
+@Table(name = "orders")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    private String name;
+    private String username;
 
-    private String image;
+    private String telephone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    @ToString.Exclude
-    private Category parent;
+    private String deliveryType;
+
+    private String deliveryAddress;
+
+    private OrderStatus status;
 }

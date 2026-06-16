@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @ToString
@@ -11,18 +13,21 @@ import org.springframework.data.annotation.PersistenceCreator;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__(@PersistenceCreator))
 @Entity
-public class Category {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    private String name;
-
-    private String image;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @OneToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Category parent;
+    private Product product;
+
+    private BigDecimal price;
+
+    private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 }
