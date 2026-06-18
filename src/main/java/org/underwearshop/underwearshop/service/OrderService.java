@@ -1,7 +1,6 @@
 package org.underwearshop.underwearshop.service;
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,12 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.underwearshop.underwearshop.dto.OrderCreateDTO;
 import org.underwearshop.underwearshop.dto.OrderUpdateDTO;
-import org.underwearshop.underwearshop.entity.*;
+import org.underwearshop.underwearshop.entity.Order;
+import org.underwearshop.underwearshop.entity.OrderItem;
+import org.underwearshop.underwearshop.entity.OrderStatus;
+import org.underwearshop.underwearshop.entity.Product;
 import org.underwearshop.underwearshop.repository.OrderItemRepository;
 import org.underwearshop.underwearshop.repository.OrderRepository;
 import org.underwearshop.underwearshop.repository.ProductRepository;
 
-import java.lang.ScopedValue;
 import java.util.List;
 import java.util.Optional;
 

@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RequiredArgsConstructor
 @Getter
-public class OrderDTO {
+public class ShortOrderDTO {
     private final Long id;
 
     private final String username;
@@ -23,15 +20,12 @@ public class OrderDTO {
 
     private final OrderStatus status;
 
-    private final List<OrderItemDTO> orderItems;
-
-    public OrderDTO(Order order) {
+    public ShortOrderDTO(Order order) {
         this.id = order.getId();
         this.username = order.getUsername();
         this.telephone = order.getTelephone();
         this.deliveryType = order.getDeliveryType();
         this.deliveryAddress = order.getDeliveryAddress();
         this.status = order.getStatus();
-        this.orderItems = order.getOrderItems() != null ? order.getOrderItems().stream().map(OrderItemDTO::new).toList() : new ArrayList<>();
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -27,4 +29,7 @@ public class Order {
     private String deliveryAddress;
 
     private OrderStatus status;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 }

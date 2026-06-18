@@ -19,7 +19,7 @@ public class OrderItem {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private Product product;
 
