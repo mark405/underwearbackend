@@ -5,10 +5,17 @@ import org.springframework.stereotype.Repository;
 import org.underwearshop.underwearshop.entity.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findByParentIsNullOrderByIdAsc();
+    List<Category> findByParentIsNullOrderByPositionAscIdAsc();
 
-    List<Category> findByParentIdOrderByIdAsc(Long parentId);
+    List<Category> findByParentIdOrderByPositionAscIdAsc(Long parentId);
+
+    Optional<Category> findTopByParentIsNullOrderByPositionDesc();
+
+    Optional<Category> findTopByParentIdOrderByPositionDesc(Long parentId);
+
+    boolean existsByParentId(Long parentId);
 }

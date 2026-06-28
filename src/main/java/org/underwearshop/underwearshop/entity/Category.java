@@ -21,6 +21,8 @@ public class Category {
 
     private String image;
 
+    private Integer position;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @ToString.Exclude

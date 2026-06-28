@@ -12,8 +12,6 @@ public class OrderUpdateDTO {
 
     private String telephone;
 
-    private String deliveryType;
-
     private String deliveryAddress;
 
     private OrderStatus status;

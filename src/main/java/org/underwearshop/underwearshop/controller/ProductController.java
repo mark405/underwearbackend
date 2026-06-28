@@ -84,4 +84,10 @@ public class ProductController {
     ) {
         return new ProductDTO(productService.update(id, dto, mainImage, images).orElseThrow());
     }
+
+    @DeleteMapping("/admin/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        productService.delete(id).orElseThrow();
+    }
 }

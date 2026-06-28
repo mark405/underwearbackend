@@ -67,6 +67,7 @@ public class ProductService {
                 .size(dto.getSize())
                 .category(category)
                 .inStock(true)
+                .deleted(false)
                 .build();
 
         if (mainImage != null && !mainImage.isEmpty()) {
@@ -152,6 +153,16 @@ public class ProductService {
                     }
 
                     return savedProduct;
+                });
+    }
+
+    @Transactional
+    public Optional<Product> delete(Long id) {
+        return productRepository.findById(id)
+                .map(entity -> {
+                    entity.setDeleted(true);
+
+                    return productRepository.save(entity);
                 });
     }
 }

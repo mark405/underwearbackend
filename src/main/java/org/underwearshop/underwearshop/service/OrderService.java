@@ -69,7 +69,6 @@ public class OrderService {
             order.setUsername(dto.getUsername());
             order.setTelephone(dto.getTelephone());
             order.setDeliveryAddress(dto.getDeliveryAddress());
-            order.setDeliveryType(dto.getDeliveryType());
             order.setStatus(dto.getStatus());
 
             return orderRepository.save(order);

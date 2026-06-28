@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     @EntityGraph(attributePaths = {"images",})
     Optional<Product> findById(Long id);
+
+    boolean existsByCategoryId(Long categoryId);
 }

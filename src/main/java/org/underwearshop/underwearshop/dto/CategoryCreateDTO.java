@@ -10,4 +10,6 @@ public class CategoryCreateDTO {
 
     @NotBlank
     private String name;
+
+    private Long parentId;
 }

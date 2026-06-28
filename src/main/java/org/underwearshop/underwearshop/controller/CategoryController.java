@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.underwearshop.underwearshop.dto.CategoryCreateDTO;
 import org.underwearshop.underwearshop.dto.CategoryDTO;
+import org.underwearshop.underwearshop.dto.CategoryReorderDTO;
 import org.underwearshop.underwearshop.dto.CategoryUpdateDTO;
 import org.underwearshop.underwearshop.service.CategoryService;
 
@@ -47,5 +48,21 @@ public class CategoryController {
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         return new CategoryDTO(categoryService.update(id, dto, file).orElseThrow());
+    }
+
+    @DeleteMapping("/admin/{id}/image")
+    public CategoryDTO deleteImage(@PathVariable Long id) {
+        return new CategoryDTO(categoryService.deleteImage(id).orElseThrow());
+    }
+
+    @DeleteMapping("/admin/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        categoryService.delete(id).orElseThrow();
+    }
+
+    @PutMapping("/admin/reorder")
+    public void reorder(@RequestBody @Valid CategoryReorderDTO dto) {
+        categoryService.reorder(dto.getOrderedIds());
     }
 }

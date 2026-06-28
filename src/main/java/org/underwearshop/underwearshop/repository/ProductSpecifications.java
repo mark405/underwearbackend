@@ -17,6 +17,11 @@ public final class ProductSpecifications {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
+            predicates.add(cb.or(
+                    cb.isNull(root.get("deleted")),
+                    cb.isFalse(root.get("deleted"))
+            ));
+
             if (filter.name() != null && !filter.name().isBlank()) {
                 predicates.add(
                         cb.like(

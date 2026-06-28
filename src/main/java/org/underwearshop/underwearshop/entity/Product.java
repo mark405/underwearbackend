@@ -41,6 +41,8 @@ public class Product {
 
     private Boolean inStock;
 
+    private Boolean deleted;
+
     private String size;
 
     @CreationTimestamp
