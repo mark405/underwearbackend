@@ -2,6 +2,7 @@ package org.underwearshop.underwearshop.service;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,8 @@ import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderItem;
 import org.underwearshop.underwearshop.entity.OrderStatus;
 import org.underwearshop.underwearshop.entity.Product;
+import org.underwearshop.underwearshop.event.OrderCreatedEvent;
+import org.underwearshop.underwearshop.event.OrderStatusChangedEvent;
 import org.underwearshop.underwearshop.repository.OrderItemRepository;
 import org.underwearshop.underwearshop.repository.OrderRepository;
 import org.underwearshop.underwearshop.repository.ProductRepository;
@@ -26,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional(readOnly = true)
     public Page<Order> findAll(@Nullable OrderStatus status, int page, int size) {
@@ -39,6 +43,11 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Optional<Order> findOne(Long id) {
         return orderRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> findAllPending() {
+        return orderRepository.findAllByStatusIsOrderByIdDesc(OrderStatus.PENDING);
     }
 
     @Transactional
@@ -60,18 +69,47 @@ public class OrderService {
 
         orderItemRepository.saveAll(orderItems);
 
+        eventPublisher.publishEvent(new OrderCreatedEvent(order.getId()));
+
         return order;
     }
 
     @Transactional
     public Optional<Order> update(Long id, OrderUpdateDTO dto) {
         return orderRepository.findById(id).map(order -> {
+            OrderStatus oldStatus = order.getStatus();
+
             order.setUsername(dto.getUsername());
             order.setTelephone(dto.getTelephone());
             order.setDeliveryAddress(dto.getDeliveryAddress());
             order.setStatus(dto.getStatus());
 
-            return orderRepository.save(order);
+            Order saved = orderRepository.save(order);
+
+            if (oldStatus != dto.getStatus()) {
+                eventPublisher.publishEvent(new OrderStatusChangedEvent(id, oldStatus, dto.getStatus()));
+            }
+
+            return saved;
+        });
+    }
+
+    @Transactional
+    public Optional<Order> updateStatus(Long id, OrderStatus status) {
+        return orderRepository.findById(id).map(order -> {
+            OrderStatus oldStatus = order.getStatus();
+
+            if (oldStatus == status) {
+                return order;
+            }
+
+            order.setStatus(status);
+
+            Order saved = orderRepository.save(order);
+
+            eventPublisher.publishEvent(new OrderStatusChangedEvent(id, oldStatus, status));
+
+            return saved;
         });
     }
 }
