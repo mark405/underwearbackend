@@ -18,18 +18,23 @@ public class ProductCreateDTO {
 
     private String cup;
 
+    @NotBlank
     private String color;
 
+    @NotBlank
     private String material;
 
+    @NotBlank
     private String features;
 
+    @NotNull
     private BigDecimal price;
 
     @NotNull
     @Min(0)
     private Integer quantity;
 
+    @NotBlank
     private String size;
 
     @NotNull

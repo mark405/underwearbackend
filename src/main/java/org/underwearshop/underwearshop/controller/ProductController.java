@@ -69,7 +69,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO create(
             @RequestPart("data") @Valid ProductCreateDTO dto,
-            @RequestPart(value = "mainImage", required = false) MultipartFile mainImage,
+            @RequestPart("mainImage") MultipartFile mainImage,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         return new ProductDTO(productService.create(dto, mainImage, images));

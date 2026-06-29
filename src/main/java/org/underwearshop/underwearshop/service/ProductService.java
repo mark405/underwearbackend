@@ -116,6 +116,10 @@ public class ProductService {
                     entity.setQuantity(dto.getQuantity());
                     entity.setInStock(dto.getQuantity() > 0);
 
+                    Category category = categoryRepository.findById(dto.getCategoryId())
+                            .orElseThrow();
+                    entity.setCategory(category);
+
                     if (mainImage != null) {
                         if (entity.getImage() != null) {
                             fileStorageService.delete(entity.getImage());

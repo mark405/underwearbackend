@@ -34,6 +34,9 @@ public class ProductUpdateDTO {
 
     private String size;
 
+    @NotNull
+    private Long categoryId;
+
     private List<String> imagesToDelete = new ArrayList<>();
 
 }
