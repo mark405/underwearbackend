@@ -21,6 +21,7 @@ public class ProductDTO {
     private final String material;
     private final String features;
     private final BigDecimal price;
+    private final Integer quantity;
     private final Boolean inStock;
     private final String size;
     private final CategoryDTO category;
@@ -36,6 +37,7 @@ public class ProductDTO {
         this.material = product.getMaterial();
         this.features = product.getFeatures();
         this.price = product.getPrice();
+        this.quantity = product.getQuantity();
         this.inStock = product.getInStock();
         this.size = product.getSize();
 

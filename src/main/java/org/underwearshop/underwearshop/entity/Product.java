@@ -39,6 +39,8 @@ public class Product {
 
     private BigDecimal price;
 
+    private Integer quantity;
+
     private Boolean inStock;
 
     private Boolean deleted;

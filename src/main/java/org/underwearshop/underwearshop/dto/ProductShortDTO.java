@@ -13,6 +13,7 @@ public class ProductShortDTO {
     private final String name;
     private final String image;
     private final BigDecimal price;
+    private final Integer quantity;
     private final Boolean inStock;
     private final CategoryDTO category;
 
@@ -21,6 +22,7 @@ public class ProductShortDTO {
         this.name = product.getName();
         this.image = product.getImage();
         this.price = product.getPrice();
+        this.quantity = product.getQuantity();
         this.inStock = product.getInStock();
 
         this.category = new CategoryDTO(product.getCategory());

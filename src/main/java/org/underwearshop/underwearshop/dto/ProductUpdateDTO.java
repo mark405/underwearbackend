@@ -1,6 +1,8 @@
 package org.underwearshop.underwearshop.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,7 +28,9 @@ public class ProductUpdateDTO {
 
     private BigDecimal price;
 
-    private Boolean inStock;
+    @NotNull
+    @Min(0)
+    private Integer quantity;
 
     private String size;
 

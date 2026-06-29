@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.underwearshop.underwearshop.dto.OrderCreateDTO;
+import org.underwearshop.underwearshop.dto.OrderItemCreateDTO;
 import org.underwearshop.underwearshop.dto.OrderUpdateDTO;
 import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderItem;
@@ -21,7 +22,9 @@ import org.underwearshop.underwearshop.repository.OrderRepository;
 import org.underwearshop.underwearshop.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,12 +65,26 @@ public class OrderService {
 
         orderRepository.save(order);
 
+        Map<Long, Product> productsById = dto.getOrderItems().stream()
+                .map(OrderItemCreateDTO::getProductId)
+                .distinct()
+                .collect(Collectors.toMap(id -> id, id -> productRepository.findById(id).orElseThrow()));
+
         List<OrderItem> orderItems = dto.getOrderItems().stream().map(it -> {
-            Product product = productRepository.findById(it.getProductId()).orElseThrow();
+            Product product = productsById.get(it.getProductId());
             return OrderItem.builder().order(order).product(product).price(product.getPrice()).quantity(it.getQuantity()).build();
         }).toList();
 
         orderItemRepository.saveAll(orderItems);
+
+        for (OrderItem orderItem : orderItems) {
+            Product product = orderItem.getProduct();
+
+            product.setQuantity(product.getQuantity() - orderItem.getQuantity());
+            product.setInStock(product.getQuantity() > 0);
+        }
+
+        productRepository.saveAll(productsById.values());
 
         eventPublisher.publishEvent(new OrderCreatedEvent(order.getId()));
 

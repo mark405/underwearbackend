@@ -66,7 +66,8 @@ public class ProductService {
                 .cup(dto.getCup())
                 .size(dto.getSize())
                 .category(category)
-                .inStock(true)
+                .quantity(dto.getQuantity())
+                .inStock(dto.getQuantity() > 0)
                 .deleted(false)
                 .build();
 
@@ -112,7 +113,8 @@ public class ProductService {
                     entity.setCircumference(dto.getCircumference());
                     entity.setCup(dto.getCup());
                     entity.setSize(dto.getSize());
-                    entity.setInStock(dto.getInStock());
+                    entity.setQuantity(dto.getQuantity());
+                    entity.setInStock(dto.getQuantity() > 0);
 
                     if (mainImage != null) {
                         if (entity.getImage() != null) {
