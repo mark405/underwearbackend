@@ -22,6 +22,8 @@ public class Order {
 
     private String username;
 
+    private String email;
+
     private String telephone;
 
     private String deliveryType;

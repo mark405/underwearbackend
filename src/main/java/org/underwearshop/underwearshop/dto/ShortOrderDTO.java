@@ -12,6 +12,8 @@ public class ShortOrderDTO {
 
     private final String username;
 
+    private final String email;
+
     private final String telephone;
 
     private final String deliveryType;
@@ -23,6 +25,7 @@ public class ShortOrderDTO {
     public ShortOrderDTO(Order order) {
         this.id = order.getId();
         this.username = order.getUsername();
+        this.email = order.getEmail();
         this.telephone = order.getTelephone();
         this.deliveryType = order.getDeliveryType();
         this.deliveryAddress = order.getDeliveryAddress();

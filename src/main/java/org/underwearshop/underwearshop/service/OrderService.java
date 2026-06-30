@@ -57,6 +57,7 @@ public class OrderService {
     public Order create(OrderCreateDTO dto) {
         Order order = Order.builder()
                 .username(dto.getUsername())
+                .email(dto.getEmail())
                 .telephone(dto.getTelephone())
                 .deliveryAddress(dto.getDeliveryAddress())
                 .deliveryType(dto.getDeliveryType())
@@ -98,6 +99,7 @@ public class OrderService {
             OrderStatus oldStatus = order.getStatus();
 
             order.setUsername(dto.getUsername());
+            order.setEmail(dto.getEmail());
             order.setTelephone(dto.getTelephone());
             order.setDeliveryAddress(dto.getDeliveryAddress());
             order.setStatus(dto.getStatus());

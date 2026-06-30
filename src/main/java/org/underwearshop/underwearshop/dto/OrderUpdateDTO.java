@@ -10,6 +10,8 @@ public class OrderUpdateDTO {
 
     private String username;
 
+    private String email;
+
     private String telephone;
 
     private String deliveryAddress;
