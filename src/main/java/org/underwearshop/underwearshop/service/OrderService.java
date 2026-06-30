@@ -76,6 +76,7 @@ public class OrderService {
         }).toList();
 
         orderItemRepository.saveAll(orderItems);
+        order.setOrderItems(orderItems);
 
         for (OrderItem orderItem : orderItems) {
             Product product = orderItem.getProduct();
