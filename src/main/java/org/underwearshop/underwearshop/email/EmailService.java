@@ -1,6 +1,9 @@
 package org.underwearshop.underwearshop.email;
 
-import com.sendgrid.*;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
@@ -13,8 +16,8 @@ import org.thymeleaf.context.Context;
 import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderItem;
 
-import java.math.BigDecimal;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -60,7 +63,7 @@ public class EmailService {
         try {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
-            
+
             request.setBody(mail.build());
 
             Response response = sg.api(request);
@@ -97,5 +100,6 @@ public class EmailService {
             Integer quantity,
             BigDecimal price,
             BigDecimal lineTotal
-    ) {}
+    ) {
+    }
 }
