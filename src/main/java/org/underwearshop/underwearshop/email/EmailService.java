@@ -1,12 +1,12 @@
 package org.underwearshop.underwearshop.email;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -14,6 +14,7 @@ import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderItem;
 
 import java.math.BigDecimal;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -21,19 +22,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+
+    @Value("${sendgrid.api.key}")
+    private String apiKey;
 
     @Value("${mail.from}")
     private String from;
 
     public void sendOrderConfirmation(Order order) {
+
         if (order.getEmail() == null || order.getEmail().isBlank()) {
             return;
         }
 
         List<OrderItemView> items = buildItemViews(order);
-        BigDecimal total = items.stream().map(OrderItemView::lineTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = items.stream()
+                .map(OrderItemView::lineTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Context context = new Context();
         context.setVariable("order", order);
@@ -42,16 +48,29 @@ public class EmailService {
 
         String html = templateEngine.process("order-confirmation", context);
 
+        Email fromEmail = new Email(from);
+        Email toEmail = new Email(order.getEmail());
+
+        Content content = new Content("text/html", html);
+        Mail mail = new Mail(fromEmail, "Підтвердження замовлення #" + order.getId(), toEmail, content);
+
+        SendGrid sg = new SendGrid(apiKey);
+        Request request = new Request();
+
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
-            helper.setTo(order.getEmail());
-            helper.setFrom(from);
-            helper.setSubject("Підтвердження замовлення #" + order.getId());
-            helper.setText(html, true);
-            mailSender.send(message);
-        } catch (MessagingException e) {
-            log.warn("Failed to send order confirmation email to {}", order.getEmail(), e);
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+
+            if (response.getStatusCode() >= 400) {
+                log.warn("SendGrid failed: status={}, body={}", response.getStatusCode(), response.getBody());
+            }
+
+        } catch (IOException e) {
+            log.warn("Failed to send email via SendGrid", e);
         }
     }
 
@@ -64,10 +83,19 @@ public class EmailService {
         return orderItems.stream().map(item -> {
             BigDecimal price = item.getPrice() != null ? item.getPrice() : item.getProduct().getPrice();
             BigDecimal lineTotal = price.multiply(BigDecimal.valueOf(item.getQuantity()));
-            return new OrderItemView(item.getProduct().getName(), item.getQuantity(), price, lineTotal);
+            return new OrderItemView(
+                    item.getProduct().getName(),
+                    item.getQuantity(),
+                    price,
+                    lineTotal
+            );
         }).toList();
     }
 
-    public record OrderItemView(String productName, Integer quantity, BigDecimal price, BigDecimal lineTotal) {
-    }
+    public record OrderItemView(
+            String productName,
+            Integer quantity,
+            BigDecimal price,
+            BigDecimal lineTotal
+    ) {}
 }
