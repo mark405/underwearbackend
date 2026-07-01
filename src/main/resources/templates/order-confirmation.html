@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Підтвердження замовлення</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
+    <tr>
+        <td style="background-color: #222222; padding: 20px 24px;">
+            <h1 style="color: #ffffff; font-size: 20px; margin: 0;">Дякуємо за замовлення!</h1>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding: 24px;">
+            <p style="font-size: 15px; color: #333333;">
+                Вітаємо, <strong th:text="${order.username}">Клієнт</strong>! Ваше замовлення
+                <strong th:text="'#' + ${order.id}">#1</strong> успішно оформлено.
+            </p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top: 16px; font-size: 14px; color: #333333;">
+                <tr>
+                    <td style="padding: 4px 0;"><strong>Телефон:</strong></td>
+                    <td style="padding: 4px 0;" th:text="${order.telephone}">+380000000000</td>
+                </tr>
+                <tr>
+                    <td style="padding: 4px 0;"><strong>Доставка:</strong></td>
+                    <td style="padding: 4px 0;" th:text="${order.deliveryType}">Нова пошта</td>
+                </tr>
+                <tr>
+                    <td style="padding: 4px 0;"><strong>Адреса:</strong></td>
+                    <td style="padding: 4px 0;" th:text="${order.deliveryAddress}">Адреса доставки</td>
+                </tr>
+            </table>
+
+            <h2 style="font-size: 16px; color: #222222; margin-top: 24px;">Товари</h2>
+            <table role="presentation" width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse; font-size: 14px;">
+                <thead>
+                <tr style="background-color: #f0f0f0; text-align: left;">
+                    <th style="border-bottom: 1px solid #dddddd;">Товар</th>
+                    <th style="border-bottom: 1px solid #dddddd;">К-сть</th>
+                    <th style="border-bottom: 1px solid #dddddd;">Ціна</th>
+                    <th style="border-bottom: 1px solid #dddddd;">Сума</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td style="border-bottom: 1px solid #eeeeee;" th:text="${item.productName}">Товар</td>
+                    <td style="border-bottom: 1px solid #eeeeee;" th:text="${item.quantity}">1</td>
+                    <td style="border-bottom: 1px solid #eeeeee;" th:text="${item.price}">0</td>
+                    <td style="border-bottom: 1px solid #eeeeee;" th:text="${item.lineTotal}">0</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p style="font-size: 16px; color: #222222; text-align: right; margin-top: 16px;">
+                <strong>Разом: <span th:text="${total}">0</span> грн</strong>
+            </p>
+
+            <p style="font-size: 13px; color: #888888; margin-top: 32px;">
+                Якщо у вас виникли питання щодо замовлення, відповідайте на цей лист або зв'яжіться з нами за вказаним номером телефону.
+            </p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
