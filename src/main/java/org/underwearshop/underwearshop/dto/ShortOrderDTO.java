@@ -20,6 +20,8 @@ public class ShortOrderDTO {
 
     private final String deliveryAddress;
 
+    private final boolean contactByPhone;
+
     private final OrderStatus status;
 
     public ShortOrderDTO(Order order) {
@@ -29,6 +31,7 @@ public class ShortOrderDTO {
         this.telephone = order.getTelephone();
         this.deliveryType = order.getDeliveryType();
         this.deliveryAddress = order.getDeliveryAddress();
+        this.contactByPhone = order.isContactByPhone();
         this.status = order.getStatus();
     }
 }

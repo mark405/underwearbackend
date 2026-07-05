@@ -23,6 +23,8 @@ public class OrderCreateDTO {
 
     private String deliveryAddress;
 
+    private boolean contactByPhone;
+
     @NotEmpty
     private List<OrderItemCreateDTO> orderItems;
 }

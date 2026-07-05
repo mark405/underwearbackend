@@ -24,10 +24,6 @@
                     <td style="padding: 4px 0;" th:text="${order.telephone}">+380000000000</td>
                 </tr>
                 <tr>
-                    <td style="padding: 4px 0;"><strong>Доставка:</strong></td>
-                    <td style="padding: 4px 0;" th:text="${order.deliveryType}">Нова пошта</td>
-                </tr>
-                <tr>
                     <td style="padding: 4px 0;"><strong>Адреса:</strong></td>
                     <td style="padding: 4px 0;" th:text="${order.deliveryAddress}">Адреса доставки</td>
                 </tr>
@@ -56,6 +52,11 @@
             <p style="font-size: 16px; color: #222222; text-align: right; margin-top: 16px;">
                 <strong>Разом: <span th:text="${total}">0</span> грн</strong>
             </p>
+
+            <div th:if="${paymentDetails != null and !paymentDetails.isBlank()}" style="margin-top: 24px;">
+                <h2 style="font-size: 16px; color: #222222; margin: 0 0 8px;">Оплата</h2>
+                <p style="font-size: 14px; color: #333333; white-space: pre-line; margin: 0;" th:text="${paymentDetails}">Реквізити для оплати</p>
+            </div>
 
             <p style="font-size: 13px; color: #888888; margin-top: 32px;">
                 Якщо у вас виникли питання щодо замовлення, відповідайте на цей лист або зв'яжіться з нами за вказаним номером телефону.

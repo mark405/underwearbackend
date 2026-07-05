@@ -41,4 +41,10 @@ public class OrderController {
     ) {
         return new ShortOrderDTO(orderService.update(id, dto).orElseThrow());
     }
+
+    @PostMapping("/admin/{id}/resend-email")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resendEmail(@PathVariable Long id) {
+        orderService.resendConfirmationEmail(id);
+    }
 }

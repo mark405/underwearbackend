@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @ToString
@@ -13,30 +11,24 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE, onConstructor = @__(@PersistenceCreator))
 @Entity
-public class OrderItem {
+public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_variant_id")
-    @ToString.Exclude
-    private ProductVariant productVariant;
 
     private String size;
 
     private String color;
 
-    private BigDecimal price;
-
     private Integer quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Boolean inStock;
+
+    private Boolean active;
 }

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class OrderItemCreateDTO {
     @NotNull
-    private Long productId;
+    private Long productVariantId;
     @NotNull
     private Integer quantity;
 }

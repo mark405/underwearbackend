@@ -23,6 +23,8 @@ public class OrderDTO {
 
     private final String deliveryAddress;
 
+    private final boolean contactByPhone;
+
     private final OrderStatus status;
 
     private final List<OrderItemDTO> orderItems;
@@ -34,6 +36,7 @@ public class OrderDTO {
         this.telephone = order.getTelephone();
         this.deliveryType = order.getDeliveryType();
         this.deliveryAddress = order.getDeliveryAddress();
+        this.contactByPhone = order.isContactByPhone();
         this.status = order.getStatus();
         this.orderItems = order.getOrderItems() != null ? order.getOrderItems().stream().map(OrderItemDTO::new).toList() : new ArrayList<>();
     }

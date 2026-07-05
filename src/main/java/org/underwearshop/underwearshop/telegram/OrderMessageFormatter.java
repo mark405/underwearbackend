@@ -19,6 +19,7 @@ final class OrderMessageFormatter {
         sb.append(title).append(" #").append(order.getId()).append("\n");
         sb.append("Клієнт: ").append(order.getUsername()).append("\n");
         sb.append("Телефон: ").append(order.getTelephone()).append("\n");
+        sb.append("Зв'язок: ").append(order.isContactByPhone() ? "Телефон" : "Email").append("\n");
         sb.append("Доставка: ").append(order.getDeliveryType()).append(", ").append(order.getDeliveryAddress()).append("\n");
         sb.append("Статус: ").append(statusLabel(order.getStatus())).append("\n");
         sb.append("Товари:\n");

@@ -1,6 +1,7 @@
 package org.underwearshop.underwearshop.telegram;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -11,6 +12,7 @@ import org.underwearshop.underwearshop.service.OrderService;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderNotificationListener {
 
     private final OrderService orderService;
@@ -25,6 +27,7 @@ public class OrderNotificationListener {
 
         orderService.findOne(event.orderId()).ifPresent(order ->
                 bot.broadcast(OrderMessageFormatter.formatOrder(order, "🆕 Нове замовлення"), OrderMessageFormatter.statusKeyboard(order.getId())));
+        log.info("Sent notification to subscribers about new order {}", event.orderId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

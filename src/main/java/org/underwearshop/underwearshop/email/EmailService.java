@@ -10,14 +10,20 @@ import com.sendgrid.helpers.mail.objects.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.underwearshop.underwearshop.entity.EmailLog;
 import org.underwearshop.underwearshop.entity.Order;
 import org.underwearshop.underwearshop.entity.OrderItem;
+import org.underwearshop.underwearshop.repository.EmailLogRepository;
+import org.underwearshop.underwearshop.service.EmailPaymentDetailsService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -26,6 +32,8 @@ import java.util.List;
 public class EmailService {
 
     private final TemplateEngine templateEngine;
+    private final EmailLogRepository emailLogRepository;
+    private final EmailPaymentDetailsService emailPaymentDetailsService;
 
     @Value("${sendgrid.api.key}")
     private String apiKey;
@@ -34,11 +42,26 @@ public class EmailService {
     private String from;
 
     public void sendOrderConfirmation(Order order) {
+        if (order.isContactByPhone()) {
+            return;
+        }
 
         if (order.getEmail() == null || order.getEmail().isBlank()) {
             return;
         }
 
+        sendOrderConfirmationEmail(order);
+    }
+
+    public void resendOrderConfirmation(Order order) {
+        if (order.getEmail() == null || order.getEmail().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "У замовлення не вказано email");
+        }
+
+        sendOrderConfirmationEmail(order);
+    }
+
+    private void sendOrderConfirmationEmail(Order order) {
         List<OrderItemView> items = buildItemViews(order);
         BigDecimal total = items.stream()
                 .map(OrderItemView::lineTotal)
@@ -48,14 +71,29 @@ public class EmailService {
         context.setVariable("order", order);
         context.setVariable("items", items);
         context.setVariable("total", total);
+        context.setVariable("paymentDetails", emailPaymentDetailsService.get().getContent());
 
         String html = templateEngine.process("order-confirmation", context);
+        String subject = "Підтвердження замовлення #" + order.getId();
 
+        boolean success = send(order.getEmail(), subject, html);
+
+        emailLogRepository.save(EmailLog.builder()
+                .order(order)
+                .recipient(order.getEmail())
+                .subject(subject)
+                .body(html)
+                .success(success)
+                .createdAt(LocalDateTime.now())
+                .build());
+    }
+
+    private boolean send(String recipient, String subject, String html) {
         Email fromEmail = new Email(from);
-        Email toEmail = new Email(order.getEmail());
+        Email toEmail = new Email(recipient);
 
         Content content = new Content("text/html", html);
-        Mail mail = new Mail(fromEmail, "Підтвердження замовлення #" + order.getId(), toEmail, content);
+        Mail mail = new Mail(fromEmail, subject, toEmail, content);
 
         SendGrid sg = new SendGrid(apiKey);
         Request request = new Request();
@@ -67,13 +105,17 @@ public class EmailService {
             request.setBody(mail.build());
 
             Response response = sg.api(request);
+            log.info("Email sent: {}", response.getStatusCode());
 
             if (response.getStatusCode() >= 400) {
                 log.warn("SendGrid failed: status={}, body={}", response.getStatusCode(), response.getBody());
+                return false;
             }
 
+            return true;
         } catch (IOException e) {
             log.warn("Failed to send email via SendGrid", e);
+            return false;
         }
     }
 

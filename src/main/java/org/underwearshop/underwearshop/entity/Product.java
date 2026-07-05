@@ -31,21 +31,13 @@ public class Product {
 
     private String cup;
 
-    private String color;
-
     private String material;
 
     private String features;
 
     private BigDecimal price;
 
-    private Integer quantity;
-
-    private Boolean inStock;
-
     private Boolean deleted;
-
-    private String size;
 
     @CreationTimestamp
     private Instant createdAt;
@@ -57,4 +49,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<ProductImage> images = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<ProductVariant> variants = new ArrayList<>();
 }

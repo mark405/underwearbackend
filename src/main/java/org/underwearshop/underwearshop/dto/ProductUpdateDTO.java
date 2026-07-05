@@ -1,7 +1,8 @@
 package org.underwearshop.underwearshop.dto;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,8 +21,6 @@ public class ProductUpdateDTO {
 
     private String cup;
 
-    private String color;
-
     private String material;
 
     private String features;
@@ -29,13 +28,11 @@ public class ProductUpdateDTO {
     private BigDecimal price;
 
     @NotNull
-    @Min(0)
-    private Integer quantity;
-
-    private String size;
-
-    @NotNull
     private Long categoryId;
+
+    @NotEmpty
+    @Valid
+    private List<ProductVariantRequestDTO> variants;
 
     private List<String> imagesToDelete = new ArrayList<>();
 

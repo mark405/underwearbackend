@@ -30,6 +30,8 @@ public class Order {
 
     private String deliveryAddress;
 
+    private boolean contactByPhone;
+
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
