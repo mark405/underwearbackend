@@ -1,0 +1,18 @@
+[Unit]
+Description=Underwear Shop Spring Boot Application
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/app
+ExecStart=/usr/bin/java -jar /opt/app/underwearshop.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=underwearshop
+
+[Install]
+WantedBy=multi-user.target
