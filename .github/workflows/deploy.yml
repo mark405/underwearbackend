@@ -19,7 +19,9 @@ jobs:
           cache: maven
 
       - name: Build jar
-        run: ./mvnw -B -DskipTests package
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
 
       - name: Copy jar to server
         uses: appleboy/scp-action@v0.1.7
