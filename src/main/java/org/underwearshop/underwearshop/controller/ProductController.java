@@ -30,9 +30,7 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) Boolean inStock,
-            @RequestParam(required = false) String bustModel,
             @RequestParam(required = false) String sizeFilter,
-            @RequestParam(required = false) String briefStyle,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
@@ -47,9 +45,7 @@ public class ProductController {
                 minPrice,
                 maxPrice,
                 inStock,
-                bustModel,
                 sizeFilter,
-                briefStyle,
                 categoryId
         );
 

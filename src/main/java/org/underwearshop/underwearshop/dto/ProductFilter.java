@@ -12,9 +12,7 @@ public record ProductFilter(
         BigDecimal minPrice,
         BigDecimal maxPrice,
         Boolean inStock,
-        String bustModel,
         String size,
-        String briefStyle,
         Long categoryId
 ) {
 }

@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/info-page/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/shop-settings/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/email-payment-details/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/attribute-options/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().permitAll()

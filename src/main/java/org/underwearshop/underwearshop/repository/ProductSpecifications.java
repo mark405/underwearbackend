@@ -79,16 +79,8 @@ public final class ProductSpecifications {
                 predicates.add(filter.inStock() ? exists : cb.not(exists));
             }
 
-            if (filter.bustModel() != null) {
-                predicates.add(cb.equal(root.get("bustModel"), filter.bustModel()));
-            }
-
             if (filter.size() != null) {
                 predicates.add(variantExists(root, query, cb, v -> cb.equal(v.get("size"), filter.size())));
-            }
-
-            if (filter.briefStyle() != null) {
-                predicates.add(cb.equal(root.get("briefStyle"), filter.briefStyle()));
             }
 
             if (filter.categoryId() != null) {
